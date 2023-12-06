@@ -1,0 +1,25 @@
+在 Spring Security 中，當配置角色（role）和權限（authority）時，有一個細微但重要的差異需要理解。這可能會解釋為什麼在資料庫中保存的是 `ROLE_USER` 或 `ROLE_ADMIN`，但在安全配置中使用的是 `hasRole("USER")` 或 `hasRole("ADMIN")`。
+
+### 角色和權限的前綴
+
+在 Spring Security 中，通常會對角色名稱使用前綴 `ROLE_`。這是一種慣例，用於區分角色（roles）和權限（authorities）：
+
+- **角色（Role）**：通常用於表示用戶屬於的群組或類別，如 `ROLE_USER`、`ROLE_ADMIN`。
+- **權限（Authority）**：通常用於表示用戶可以進行的具體操作，如 `READ_PRIVILEGES`、`WRITE_PRIVILEGES`。
+
+### Spring Security 的角色處理
+
+當使用 `hasRole` 方法時，Spring Security 會自動為提供的角色名稱添加 `ROLE_` 前綴。所以，如果您寫 `hasRole("USER")`，Spring Security 實際上會檢查 `ROLE_USER`。這意味著：
+
+- `.hasRole("USER")` 內部被轉換為檢查 `ROLE_USER`。
+- `.hasRole("ADMIN")` 內部被轉換為檢查 `ROLE_ADMIN`。
+
+### 資料庫中的角色名稱
+
+在資料庫中，角色通常存儲為 `ROLE_USER`、`ROLE_ADMIN` 等，因為這樣可以直接區分角色和其他可能的權限。
+
+### 總結
+
+因此，當您在資料庫中保存 `ROLE_USER`，但在 Spring Security 的配置中使用 `hasRole("USER")` 時，這是一種慣用的做法。Spring Security 會自動處理 `ROLE_` 前綴，這樣您就不需要在配置安全規則時重複這個前綴。
+
+這種方法使得安全規則更簡潔且易於理解。同時，它也保持了角色和權限的區分，使得您的安全配置既清晰又靈活。如果您對此有任何疑問或需要進一步的說明，請隨時提問。
