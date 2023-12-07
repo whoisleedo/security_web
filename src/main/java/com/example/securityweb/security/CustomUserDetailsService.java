@@ -25,7 +25,8 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         // 注意：使用的密碼需要帶有 {noop} 前綴，表示它是明文
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), "{noop}" + user.getPassword(), getAuthorities(user));
+        return new org.springframework.security.core.userdetails.User(user.getUsername(),
+                "{noop}" + user.getPassword(), getAuthorities(user));
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(User user) {
